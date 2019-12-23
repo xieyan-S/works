@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+  </head>
+  <body>
+    <div class="page">
+      <!-- Main Navbar-->
+      <header class="header">
+        <nav class="navbar">
+          <!-- Search Box-->
+          <div class="search-box">
+            <button class="dismiss"><i class="icon-close"></i></button>
+            <form id="searchForm" action="#" role="search">
+              <input type="search" placeholder="What are you looking for..." class="form-control">
+            </form>
+          </div>
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+              <div class="navbar-header">
+                <!-- Navbar Brand --><a href="index.html" class="navbar-brand d-none d-sm-inline-block">
+                  <div class="brand-text d-none d-lg-inline-block"><span>Bootstrap </span><strong>Dashboard</strong></div>
+                  <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>BD</strong></div></a>
+                <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
+              </div>
+              
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="page-content d-flex align-items-stretch"> 
+        <!-- Side Navbar -->
+        <nav class="side-navbar">
+          <!-- Sidebar Header-->
+          <div class="sidebar-header d-flex align-items-center">
+            <div class="avatar"><img src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
+            <div class="title">
+              <h1 class="h4" th:text="${session.user!=null?session.user.username:''}"></h1>
+              <p>Web Designer</p>
+            </div>
+          </div>
+          <ul class="list-unstyled">
+            <li><a th:href="@{~/manage}"> <i class="icon-grid"></i>消息管理</a></li>
+            <li class="active"><a th:href="@{~/send}"> <i class="fa fa-envelope-o"></i>发送消息</a></li>
+            <li><a th:href="@{~/logout}"> <i class="fa fa-sign-out"></i>注销</a></li>
+          </ul>
+        </nav>
+
+        <div class="content-inner">
+          <!-- Page Header-->
+          <header class="page-header">
+            <div class="container-fluid">
+              <h2 class="no-margin-bottom">发送消息</h2>
+            </div>
+          </header>
+
+          <!-- Forms Section-->
+          <section class="forms"> 
+            <div class="container-fluid">
+              <div class="row">
+                <!-- Basic Form-->
+                <div class="col-lg-8">
+                  <div class="card">
+                    <div class="card-close">
+                      <div class="dropdown">
+                        <button type="button" id="closeCard1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
+                        <div aria-labelledby="closeCard1" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
+                      </div>
+                    </div>
+                    <div class="card-header d-flex align-items-center">
+                      <h3 class="h4">消息填写</h3>
+                    </div>
+                    <div class="card-body">
+                      <form method="post" th:action="@{~/sendMessage}">
+                        <div class="form-group">
+                          <label class="form-control-label">标题</label>
+                          <input type="text" class="form-control" name="title" th:value="${message!=null?message.title:''}">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-control-label">内容</label>
+                          <textarea class="form-control" rows="4" name="content">[[${message!=null?message.content:''}]]</textarea>
+                        </div>
+
+                        <div class="form-group row">
+                          <div class="col-md-8">
+                            <div class="form-group row">
+                              <label for="inputEmail3" class="col-md-2 form-control-label col-form-label" style="margin-right: -5%;">接收人</label>
+                              <div class="col-md-4">
+                                <input type="text" class="form-control" id="inputEmail3" name="receiver" th:value="${message!=null?message.receiver:''}">
+                              </div>
+                              <div class="col-md-4">
+                                <div id="register-confirmpwd-error" class="is-invalid invalid-feedback col-form-label" style="display: block;" th:text="${result}"></div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="col-md-4">
+                            <input type="submit" value="发送" class="btn btn-default" style="float: right;">
+                          </div>
+                        </div>
+
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              
+              </div>
+            </div>
+          </section>
+          
+          <!-- Page Footer-->
+          <footer class="main-footer">
+
+          </footer>
+        
+        </div>
+      </div>
+    </div>
+    <!-- JavaScript files-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper.js/umd/popper.min.js"> </script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+    <!-- Main File-->
+    <script src="js/front.js"></script>
+  </body>
+</html>

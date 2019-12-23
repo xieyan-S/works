@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet" href="vendor/font-awesome/css/font-awesome.min.css">
+    <!-- Fontastic Custom icon font-->
+    <link rel="stylesheet" href="css/fontastic.css">
+    <!-- Google fonts - Poppins -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,700">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="css/style.default.css" id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="css/custom.css">
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="img/favicon.ico">
+  </head>
+  <body>
+    <div class="page">
+      <!-- Main Navbar-->
+      <header class="header">
+        <nav class="navbar">
+          <!-- Search Box-->
+          <div class="search-box">
+            <button class="dismiss"><i class="icon-close"></i></button>
+            <form id="searchForm" action="#" role="search">
+              <input type="search" placeholder="What are you looking for..." class="form-control">
+            </form>
+          </div>
+          <div class="container-fluid">
+            <div class="navbar-holder d-flex align-items-center justify-content-between">
+              <!-- Navbar Header-->
+              <div class="navbar-header">
+                <!-- Navbar Brand --><a href="index.html" class="navbar-brand d-none d-sm-inline-block">
+                  <div class="brand-text d-none d-lg-inline-block"><span>Bootstrap </span><strong>Dashboard</strong></div>
+                  <div class="brand-text d-none d-sm-inline-block d-lg-none"><strong>BD</strong></div></a>
+                <!-- Toggle Button--><a id="toggle-btn" href="#" class="menu-btn active"><span></span><span></span><span></span></a>
+              </div>
+                     
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="page-content d-flex align-items-stretch"> 
+        <!-- Side Navbar -->
+        <nav class="side-navbar">
+          <!-- Sidebar Header-->
+          <div class="sidebar-header d-flex align-items-center">
+            <div class="avatar"><img src="img/avatar-1.jpg" alt="..." class="img-fluid rounded-circle"></div>
+            <div class="title">
+              <h1 class="h4" th:text="${session.user!=null?session.user.username:''}"></h1>
+              <p>Web Designer</p>
+            </div>
+          </div>
+          <ul class="list-unstyled">
+            <li class="active"><a th:href="@{~/manage}"> <i class="icon-grid"></i>消息管理</a></li>
+            <li><a th:href="@{~/send}"> <i class="fa fa-envelope-o"></i>发送消息</a></li>
+            <li><a th:href="@{~/logout}"> <i class="fa fa-sign-out"></i>注销</a></li>
+          </ul>
+        </nav>
+
+        <div class="content-inner">
+          <!-- Page Header-->
+          <header class="page-header">
+            <div class="container-fluid">
+              <h2 class="no-margin-bottom">消息管理</h2>
+            </div>
+          </header>
+          <section class="tables">   
+            <div class="container-fluid">
+              <div class="row">
+
+                <div class="col-lg-10">
+                  <div class="card">
+                    <div class="card-close">
+                      <div class="dropdown">
+                        <button type="button" id="closeCard3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
+                        <div aria-labelledby="closeCard3" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
+                      </div>
+                    </div>
+                    <div class="card-header d-flex align-items-center">
+                      <h3 class="h4">消息表</h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="table-responsive">                       
+                        <table class="table table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">序号</th>
+                              <th scope="col">标题</th>
+                              <th scope="col">发送人</th>
+                              <th scope="col">发送时间</th>
+                              <th scope="col">状态</th>
+                              <th scope="col">操作</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr th:each="message,stat:${messageList}">
+                              <!-- <th class="align-middle" scope="row">1</th>
+                              <td class="align-middle">i can you do for my each</td>
+                              <td class="align-middle">Otto</td>
+                              <td class="align-middle">2019/12/1</td>
+                              <td class="align-middle">已读</td>
+                              <td class="align-middle">
+                                <button type="button" class="btn btn-success">查看</button>
+                                <button type="button" class="btn btn-secondary">回复</button>
+                                <button type="button" class="btn btn-danger">删除</button>
+                              </td> -->
+                              <th class="align-middle" scope="row" th:text="${stat.count}"></th>
+                              <td class="align-middle" th:text="${message.title}"></td>
+                              <td class="align-middle" th:text="${message.sender}"></td>
+                              <td class="align-middle" th:text="${#dates.format(message.date, 'yyyy-MM-dd HH:mm')}"></td>
+                              <td class="align-middle" th:text="${message.seen}==true?'已读':'未读'" th:id="message+${message.id}"></td>
+                              <td class="align-middle">
+                                <button type="button" class="btn btn-success viewBtn" data-toggle="modal" data-target="#messageContent" th:attr="msg_content=${message.content},msg_state=${message.seen},msg_id=${message.id}">查看</button>
+                                <button type="button" class="btn btn-secondary replyBtn" th:attr="del_uri=@{~/reply?receiver=}+${message.sender}">回复</button>
+                                <button type="button" class="btn btn-danger deleteBtn" th:attr="del_uri=@{~/deleteMessage?id=}+${message.id}">删除</button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <form id="operation_form" method="post">
+					
+				</form>
+
+              </div>
+            </div>
+          </section>
+          <!-- Page Footer-->
+          <footer class="main-footer">
+
+          </footer>
+          
+          <!-- Modal -->
+	      <div class="modal fade" id="messageContent" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	        <div class="modal-dialog modal-dialog-centered" role="document">
+	          <div class="modal-content">
+	            <div class="modal-header">
+	              <h5 class="modal-title" id="exampleModalCenterTitle">消息内容</h5>
+	              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                <span aria-hidden="true">&times;</span>
+	              </button>
+	            </div>
+	            <div class="modal-body"></div>
+	            <div class="modal-footer">
+	              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	            </div>
+	          </div>
+	        </div>
+		  </div>
+        
+        </div>
+      </div>
+    </div>
+    <!-- JavaScript files-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper.js/umd/popper.min.js"> </script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendor/jquery.cookie/jquery.cookie.js"> </script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/jquery-validation/jquery.validate.min.js"></script>
+    <!-- Main File-->
+    <script src="js/front.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+   		//删除消息
+    	$(".deleteBtn").click(function(){
+    		$("#operation_form").attr("action",$(this).attr("del_uri")).submit();
+    	});
+    	//查看消息
+     	$(".viewBtn").click(function(){
+     		//设置消息内容
+     		$(".modal-body").text($(this).attr("msg_content"));
+     		//设置消息已阅
+     		if($(this).attr("msg_state")!="true"){
+     			//发送Ajax请求
+     			//alert($(this).attr("seen_uri"))
+     			var msg_id = $(this).attr("msg_id");
+				$.post(
+					"/seenMessage",
+					{"id":msg_id},
+					function(data)
+					{
+						if(data.message)
+						{
+							$("#message"+msg_id).text("已读");
+						}
+					},
+					"json"
+				)
+     		}
+     	});
+     	//回复消息
+     	$(".replyBtn").click(function(){
+    		$("#operation_form").attr("action",$(this).attr("del_uri")).submit();
+    	});
+    </script>
+  </body>
+</html>
